@@ -11,6 +11,15 @@ termind = 0
 u = 0
 cel = 0
 ed = 0
+c = ntplib.NTPClient()
+response = c.request('europe.pool.ntp.org', version=3)
+ntplib.ref_id_to_text(response.ref_id)
+try:
+    loguzytkownikow = pickle.load(open('loguzytkownikow.dat', 'rb'))
+except:
+    loguzytkownikow = []
+    pickle.dump(loguzytkownikow, open('loguzytkownikow.dat', 'wb'))
+loguzytkownikow.append(ctime(response.tx_time))
 try:
     nazwyzad = pickle.load(open('nazwyzad.dat', 'rb'))
 except:
@@ -361,6 +370,9 @@ def mainmenu(mblad):
         listazadan()
     elif x=='4':
         cls()
+        print('Ostatnie użycia aplikacji: ', loguzytkownikow)
+        pickle.dump(loguzytkownikow, open('loguzytkownikow.dat', 'wb'))
+        input('Naciśnij Enter aby wyjść')
         return 0
     else:
         mainmenu('tak')
